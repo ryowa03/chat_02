@@ -16,7 +16,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
 
         //リアルタイムデーターベースのメソッド↓
-        import { getDatabase, ref, push, set, onChildAdded, remove, onChildGhanged, onChildRemoved }
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
             from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
 
 
@@ -24,6 +24,7 @@
     
         // Your web app's Firebase configuration
         const firebaseConfig = {
+      
 
         
         };
@@ -100,15 +101,12 @@
         // 質問を表示する関数
         function showRandomQuestion() {
             const questions = [
-                "ここ３年ぐらいで最も恥ずかしかったこと",
-                "ぶっちゃけ自分のことを賢いor馬鹿だと思っている？理由も併せ",
-                "最も好きなアニメとその理由",
-                "夢や目標はあるか？無いなら日々の楽しみは？",
-                "子供の頃どんな大人になると想像していた？",
-                "生まれ変わるなら女・男？理由も併せ",
-                "最近一番幸せを感じた瞬間",
-                "友達は多い方？理由も併せ",
-                "今年ガッツポーズをした出来事は？"
+                "部署の雰囲気について",
+                "残業のリアルは？",
+                "昇給どんな感じ？",
+                "あなたの今の部署での目標は？",
+            
+                "１週間前とかでも有給取りやすい？"
                 // 追加の質問を必要に応じてここに追加
             ];
 
@@ -143,7 +141,7 @@
     <div>
         <!-- 各場所にidを設定しましょう -->
         <div>
-            <input id="uname" type="text" placeholder="名前を入力してください">
+            <input id="uname" type="text" placeholder="ニックネーム">
         </div>
         <div>
             <textarea id="text" placeholder="文章を入力してください"></textarea>
@@ -156,6 +154,16 @@
         <div id="output"></div>
     </div>
 
+    <br>
+    <br>
+
+
+<div class = count>
+    <div> 雰囲気系</div>
+    <div> 待遇系</div>
+    <div> やりがい系</div>
+    <div> 仕事内容について</div>
+</div>
 
 
 <br>

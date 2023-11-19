@@ -93,6 +93,11 @@ margin-right: auto;
 width: fit-content;
 }
 
+.count{
+   display: flex;
+   justify-content: center;
+   justify-content: space-between;
+}
 
 
 
