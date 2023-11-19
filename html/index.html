@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase_version9_RealtimeDB(G'sACADEMY初学者用サンプル)</title>
+ 
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+
+        //リアルタイムデーターベースのメソッド↓
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildGhanged, onChildRemoved }
+            from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+
+
+            
+    
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6OIJAgT9yYMEIMty6cMH6iSQCSINoEOs",
+    authDomain: "sample-d502f.firebaseapp.com",
+    databaseURL: "https://sample-d502f-default-rtdb.firebaseio.com",
+    projectId: "sample-d502f",
+    storageBucket: "sample-d502f.appspot.com",
+    messagingSenderId: "775354667711",
+    appId: "1:775354667711:web:84c4176095f0f0b9b9ac0a",
+    measurementId: "G-PJBJTGBY33"
+        
+        };
+
+
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app); // RealtimeDBに接続
+        const dbRef = ref(db, "chat"); // RealtimeDB内の"chat"を使う
+
+        // データ登録(Click)
+        $('#send').on('click', function () {
+            const uname = $('#uname').val();
+            const text = $('#text').val();
+
+            // 入力された文字が確認できたあとは
+            // firebaseにデータを送るコードを記述します🤗（まだfirebaseに送っていません！）
+
+            const msg = {
+                uname: uname,
+                text: text,
+            }
+
+            // firebaseにデータを送る処理です🤗
+            // pushはfirebaseが用意したおまじないです！（注意！）
+            const newPostRef = push(dbRef);
+            // setはfirebaseが用意したおまじないです！（注意）
+            set(newPostRef, msg);
+
+            // 送信を押したら入力された文字を消すには？？
+            $('#uname').val("")
+            $('#text').val("");
+
+            // この下は消さない
+        })
+
+        // データ登録(Enter)
+        // 最初にデータ取得＆onSnapshotでリアルタイムにデータを取得
+        onChildAdded(dbRef, function (data) {
+            console.log(data, '塊')
+            const msg = data.val();
+            console.log(msg, '塊')
+            const key = data.key;
+            console.log(key, '鍵')
+
+            let html = `
+                <div class=${key}>
+                    <p>${msg.uname}</p>
+                    <p>${msg.text}</p>
+                </div>  
+            `
+
+            // 画面に表示するために埋め込みます
+            $('#output').append(html)
+
+        })
+
+
+       
+     $('#clear').on('click',function(){
+     $('#output').empty();  
+      });
+
+
+</script>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        // 質問を表示する関数
+        function showRandomQuestion() {
+            const questions = [
+                "ここ３年ぐらいで最も恥ずかしかったこと",
+                "ぶっちゃけ自分のことを賢いor馬鹿だと思っている？理由も併せ",
+                "最も好きなアニメとその理由",
+                "夢や目標はあるか？無いなら日々の楽しみは？",
+                "子供の頃どんな大人になると想像していた？",
+                "生まれ変わるなら女・男？理由も併せ",
+                "最近一番幸せを感じた瞬間",
+                "友達は多い方？理由も併せ",
+                "今年ガッツポーズをした出来事は？"
+                // 追加の質問を必要に応じてここに追加
+            ];
+
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            $('#text').val(randomQuestion);
+        }
+
+        // 本文フォームに特定の値を入力するとランダムに質問を表示
+        $('#text').on('input', function () {
+            const inputValue = $(this).val();
+            const triggerValue = 'おだ';
+
+            if (inputValue.trim() === triggerValue) {
+                showRandomQuestion();
+            }
+        });
+    });
+</script>
+
+
+</head>
+
+
+<body>
+    <h1>はじめましてチャット</h1>
+    <p class = tittle>「おだい」と入力すれば、会話のお題が表示されます</p>
+    <p class = tittle>「お題」へのチャットで盛り上がりましょう！</p>
+
+    <br>
+    <br>
+    <!-- コンテンツ表示画面 -->
+    <div>
+        <!-- 各場所にidを設定しましょう -->
+        <div>
+            <input id="uname" type="text" placeholder="名前を入力してください">
+        </div>
+        <div>
+            <textarea id="text" placeholder="文章を入力してください"></textarea>
+        </div>
+      <div class = W>
+         <button id="send">送信！！</button>
+         <button id="clear">削除</button>
+      </div>  
+        <!-- style.cssに "overflow: auto;"を書いてみましょう！※最後に -->
+        <div id="output"></div>
+    </div>
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</body>
+
+</html>
