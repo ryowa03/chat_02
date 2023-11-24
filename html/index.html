@@ -10,124 +10,138 @@
     <link rel="stylesheet" href="/css/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
-
-        //リアルタイムデーターベースのメソッド↓
-        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
-            from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+    <script src="/js/data.js"></script>
 
 
-            
+
+
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
     
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
+    //リアルタイムデーターベースのメソッド↓
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+        from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+    
+    
+        
+    
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBU8woI4pGqA6Oh0XXnlGv3Ci08THlZKAM",
+    authDomain: "sample2-424f6.firebaseapp.com",
+    databaseURL: "https://sample2-424f6-default-rtdb.firebaseio.com",
+    projectId: "sample2-424f6",
+    storageBucket: "sample2-424f6.appspot.com",
+    messagingSenderId: "86021212650",
+    appId: "1:86021212650:web:0461fcddcd5b3e51d28a93",
+    measurementId: "G-WNFPMH5V3P"
+    
+    
+    };
+    
+    
+    
+    
+    // Initialize Firebase
+    //↓ファイアーコンフィグの初期化
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app); // 
+    //refはリアルタイムデーターベースのデーター参照コード
+
+    const dbRef = ref(db, "chat"); // RealtimeDB内の"chat"を使う
+    
+    // データ登録(Click)
+    $('#send').on('click', function () {
+        const uname = $('#uname').val();
+        const text = $('#text').val();
+        // 入力された文字が確認できたあとは
+
+        // ↓firebaseにデータを送るコードを記述🤗（まだfirebaseに送っていません！）
+        //↓はファイアーにデータを送るために、unameとtextをひとまとめに定義した。
+
+        const msg = {
+            uname: uname,
+            text: text,
+        }
+    
+
+        // firebaseにデータを送る処理です🤗
+        // pushはfirebaseが用意したおまじないです！（注意！）
+        //newPostRefもフィアーのリアルタイムデーターベース用のコード 
+        const newPostRef = push(dbRef);
+        // setはfirebaseが用意したおまじない、保存するということ。
+        //つまり↓でmsgのファイアーベースへの保存が完了したということ。
+        set(newPostRef, msg);
+    
+        // 送信を押したら入力された文字を消すには？？
+        $('#uname').val("")
+        $('#text').val("");
+    
+        // この下は消さない
+    })
+    
+    // データ登録(Enter)→多分ファイアーからデータをとってくるという意味での、データ取得
+    // 最初にデータ取得＆onSnapshotでリアルタイムにデータを取得
+        //onchildaddedは、ファイアーからデータ参照する的なメソッド
+    onChildAdded(dbRef, function (data) {
       
+        const msg = data.val();   
+        const key = data.key;
+
+        let html, htmlf, htmlt;
+        
+
+// ユーザー名のテキストが「雰囲気」を含む場合
+if (msg.uname.includes("雰囲気")) {
+    htmlf = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `;
+}
+// ユーザー名のテキストが「待遇」を含む場合
+else if (msg.uname.includes("待遇")) {
+    htmlt = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `;
+}
+// 上記の条件に当てはまらない場合
+else {
+    html = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `;
+}
+
 
         
-        };
+    
+        // 画面に表示するために埋め込みます
+        $('#output').append(html)
 
+        $('#count1').append(htmlf)
 
-
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app); // RealtimeDBに接続
-        const dbRef = ref(db, "chat"); // RealtimeDB内の"chat"を使う
-
-        // データ登録(Click)
-        $('#send').on('click', function () {
-            const uname = $('#uname').val();
-            const text = $('#text').val();
-
-            // 入力された文字が確認できたあとは
-            // firebaseにデータを送るコードを記述します🤗（まだfirebaseに送っていません！）
-
-            const msg = {
-                uname: uname,
-                text: text,
-            }
-
-            // firebaseにデータを送る処理です🤗
-            // pushはfirebaseが用意したおまじないです！（注意！）
-            const newPostRef = push(dbRef);
-            // setはfirebaseが用意したおまじないです！（注意）
-            set(newPostRef, msg);
-
-            // 送信を押したら入力された文字を消すには？？
-            $('#uname').val("")
-            $('#text').val("");
-
-            // この下は消さない
-        })
-
-        // データ登録(Enter)
-        // 最初にデータ取得＆onSnapshotでリアルタイムにデータを取得
-        onChildAdded(dbRef, function (data) {
-            console.log(data, '塊')
-            const msg = data.val();
-            console.log(msg, '塊')
-            const key = data.key;
-            console.log(key, '鍵')
-
-            let html = `
-                <div class=${key}>
-                    <p>${msg.uname}</p>
-                    <p>${msg.text}</p>
-                </div>  
-            `
-
-            // 画面に表示するために埋め込みます
-            $('#output').append(html)
-
-        })
-
-
-       
-     $('#clear').on('click',function(){
-     $('#output').empty();  
-      });
-
-
-</script>
-
-
-
-
-<script>
-    $(document).ready(function() {
-        // 質問を表示する関数
-        function showRandomQuestion() {
-            const questions = [
-                "部署の雰囲気について",
-                "残業のリアルは？",
-                "昇給どんな感じ？",
-                "あなたの今の部署での目標は？",
-            
-                "１週間前とかでも有給取りやすい？"
-                // 追加の質問を必要に応じてここに追加
-            ];
-
-            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-            $('#text').val(randomQuestion);
-        }
-
-        // 本文フォームに特定の値を入力するとランダムに質問を表示
-        $('#text').on('input', function () {
-            const inputValue = $(this).val();
-            const triggerValue = 'おだ';
-
-            if (inputValue.trim() === triggerValue) {
-                showRandomQuestion();
-            }
-        });
-    });
-</script>
-
-
+        $('#count2').append(htmlt)
+    
+    })
+    
+    
+    </script>
+    
 </head>
+
+
+
+
 
 
 <body>
@@ -141,10 +155,10 @@
     <div>
         <!-- 各場所にidを設定しましょう -->
         <div>
-            <input id="uname" type="text" placeholder="ニックネーム">
+            <input id="uname" type="text" placeholder="質問ジャンル">
         </div>
         <div>
-            <textarea id="text" placeholder="文章を入力してください"></textarea>
+            <textarea id="text" placeholder="内容を入力してください"></textarea>
         </div>
       <div class = W>
          <button id="send">送信！！</button>
@@ -157,12 +171,14 @@
     <br>
     <br>
 
+<br>
+<br>
 
 <div class = count>
-    <div> 雰囲気系</div>
-    <div> 待遇系</div>
-    <div> やりがい系</div>
-    <div> 仕事内容について</div>
+    <div id = count1> 雰囲気系</div>
+    <div id = count2> 待遇系</div>
+    <div id = count3> やりがい系</div>
+    <div id = count4> 仕事内容について</div>
 </div>
 
 
