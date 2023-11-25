@@ -33,7 +33,7 @@ h1 {
 }
 
 
-input {
+select {
   width: 500px;
   padding: 10px;
   display: block;
@@ -59,7 +59,7 @@ button {
 
 #output {
 
-  width: 500px;
+  width: 700px;
   display: block;
   height: 500px;
   border: 1px solid #ccc;
@@ -93,30 +93,34 @@ margin-right: auto;
 width: fit-content;
 }
 
-.count{
-display: flex;
-font-size: 15px;
+
+.kanri{
+  text-align: center;
 }
 
+
+.count{
+display: flex;
+font-size: 11px;
+justify-content: center;
+color: blue;
+}
+
+.count p {
+  color:initial
+  }
+  
 
 #count1,#count2,#count3,#count4{
   width: 200px;
   display: block;
   height: 300px;
   border: 1px solid #ccc;
-  margin: 0 auto;
+  margin-left: 50px;
   border-radius: 8px;
   padding: 10px;
+
 }
 
 
 
-
-
-width: 125px;
-   display: block;
-   height: 500px;
-   border: 1px solid #ccc;
-   margin: 0 auto;
-   border-radius: 8px;
-   padding: 10px;

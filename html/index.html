@@ -29,14 +29,7 @@
     
     // Your web app's Firebase configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyBU8woI4pGqA6Oh0XXnlGv3Ci08THlZKAM",
-    authDomain: "sample2-424f6.firebaseapp.com",
-    databaseURL: "https://sample2-424f6-default-rtdb.firebaseio.com",
-    projectId: "sample2-424f6",
-    storageBucket: "sample2-424f6.appspot.com",
-    messagingSenderId: "86021212650",
-    appId: "1:86021212650:web:0461fcddcd5b3e51d28a93",
-    measurementId: "G-WNFPMH5V3P"
+
     
     
     };
@@ -91,8 +84,8 @@
         const msg = data.val();   
         const key = data.key;
 
-        let html, htmlf, htmlt;
-        
+        let html, htmlf, htmlt, htmly ,htmls ;
+
 
 // ユーザー名のテキストが「雰囲気」を含む場合
 if (msg.uname.includes("雰囲気")) {
@@ -101,7 +94,15 @@ if (msg.uname.includes("雰囲気")) {
             <p>${msg.uname}</p>
             <p>${msg.text}</p>
         </div>
-    `;
+    `
+    html = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `  
+    ;
+    
 }
 // ユーザー名のテキストが「待遇」を含む場合
 else if (msg.uname.includes("待遇")) {
@@ -110,8 +111,50 @@ else if (msg.uname.includes("待遇")) {
             <p>${msg.uname}</p>
             <p>${msg.text}</p>
         </div>
-    `;
+    `
+    html = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `  
+    ;
 }
+else if (msg.uname.includes("やりがい")) {
+    htmly = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `
+    html = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `  
+    
+    ;
+}
+
+else if (msg.uname.includes("仕事内容")) {
+    htmls = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `
+    html = `
+        <div class=${key}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+        </div>
+    `  
+    
+    ;
+}
+
+
 // 上記の条件に当てはまらない場合
 else {
     html = `
@@ -131,11 +174,19 @@ else {
         $('#count1').append(htmlf)
 
         $('#count2').append(htmlt)
+
+        $('#count3').append(htmly)
+
+        $('#count4').append(htmls)
     
     })
     
     
     </script>
+
+
+
+
     
 </head>
 
@@ -145,23 +196,37 @@ else {
 
 
 <body>
-    <h1>はじめましてチャット</h1>
-    <p class = tittle>「おだい」と入力すれば、会話のお題が表示されます</p>
-    <p class = tittle>「お題」へのチャットで盛り上がりましょう！</p>
+    <h1>〇〇部署へ「なんでも質問」<br> ※絶対に他言しません </h1>
+  
+    <p class = tittle>以下より、質問したい内容のジャンルをお選びください。</p>
 
-    <br>
+
     <br>
     <!-- コンテンツ表示画面 -->
     <div>
         <!-- 各場所にidを設定しましょう -->
         <div>
-            <input id="uname" type="text" placeholder="質問ジャンル">
+            <select id="uname" type="text" placeholder="質問ジャンル">
+
+
+                <option value=""></option>
+                <option value="雰囲気">雰囲気</option>
+                <option value="待遇">待遇</option>
+                <option value="やりがい">やりがい</option>
+                <option value="仕事内容">仕事内容 </option>   
+
+
+            </select>
+
+
+
+
         </div>
         <div>
             <textarea id="text" placeholder="内容を入力してください"></textarea>
         </div>
       <div class = W>
-         <button id="send">送信！！</button>
+         <button id="send">送信</button>
          <button id="clear">削除</button>
       </div>  
         <!-- style.cssに "overflow: auto;"を書いてみましょう！※最後に -->
@@ -173,7 +238,13 @@ else {
 
 <br>
 <br>
+<br>
+<br>
 
+
+<div class = kanri>管理者用</div>
+<br>
+<br>
 <div class = count>
     <div id = count1> 雰囲気系</div>
     <div id = count2> 待遇系</div>
@@ -187,6 +258,25 @@ else {
 <br>
 <br>
 <br>
+
+
+
+<script>
+    //クリアボタンでテキストを削除
+    $('#clear').on('click',function(){
+        $('#output').empty();  
+        });
+
+        //同じようにcountの奴らも削除
+        $('#clear').on('click',function(){
+        $('.count p').empty();  
+        });
+
+
+    </script>
+    
+
+
 
 </body>
 
